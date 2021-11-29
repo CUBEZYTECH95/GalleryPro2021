@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "301024269182",
+    "project_id": "gallery-pro-2021",
+    "storage_bucket": "gallery-pro-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301024269182:android:d60d2bf401e77ae9e3d92f",
+        "android_client_info": {
+          "package_name": "gallerypro.galleryapp.bestgallery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301024269182-mcc06ch23rco2a3nsnt7iai9vfdsr99h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfpnT5qHU6PIVhtdlmeNzOv4Y7LyPHycs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301024269182-mcc06ch23rco2a3nsnt7iai9vfdsr99h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

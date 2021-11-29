@@ -1,0 +1,50 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorWhite2</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAppBarTitle</item>
+        <item name="android:textColorSecondary">@color/colorAppBarTitle</item>
+        <item name="android:itemBackground">@color/colorOptionMenuBackground</item>
+        <item name="android:textColor">@color/colorOptionMenuText</item>
+    </style>
+
+    <style name="AllAlbumImageTheme" parent="AppTheme">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:editTextColor">@color/colorOptionMenuText</item>
+        <item name="android:dialogTheme">@style/Dialog.Theme</item>
+        <item name="actionModeStyle">@style/ActionModeStyle</item>
+    </style>
+
+    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">@color/colorWhite2</item>
+    </style>
+
+    <style name="Dialog.Theme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AllAlbumVideoTheme" parent="AppTheme">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/colorDarkBlue2</item>
+        <item name="android:dialogTheme">@style/Dialog.Theme</item>
+        <item name="android:textColorPrimary">#fff</item>
+    </style>
+
+    <style name="AppTheme.AdAttribution">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:background">#ffcc66</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">Ad</item>
+        <item name="android:height">15dp</item>
+        <item name="android:width">15dp</item>
+    </style>
+
+</resources>

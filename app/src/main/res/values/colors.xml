@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F8F8F8</color>
+    <color name="colorPrimaryDark">#F8F8F8</color>
+    <color name="colorAccent">#037FF3</color>
+
+    <color name="colorDarkBlue2">#505050</color>
+
+    <color name="colorOnlyWhite">#FFFFFF</color>
+    <color name="colorOnlyBlack">#000000</color>
+
+    <color name="colorWhite2">#F8F8F8</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="colorBlack">#000000</color>
+
+
+    <color name="colorText">#000000</color>
+    <color name="colorDefText">#9A9A9A</color>
+    
+    <color name="colorAppBarTitle">#9A9A9A</color>
+
+    <color name="colorOptionMenuBackground">#FFFFFF</color>
+    <color name="colorOptionMenuText">#000000</color>
+
+    <color name="colorKeyboardButton">#808080</color>
+    <color name="colorKeyboardText">#FFFFFF</color>
+
+
+
+
+
+    <color name="gnt_test_background_color">#00F4F4F4</color>
+
+    <color name="gnt_gray">#808080</color>
+    <color name="gnt_green">#00FF00</color>
+    <color name="gnt_blue">#4285f4</color>
+
+
+
+
+
+    <color name="crop_blue">#037FF3</color>
+
+
+
+</resources>

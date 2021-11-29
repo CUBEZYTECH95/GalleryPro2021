@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="gallerypro.galleryapp.bestgallery.activity.HideImageSliderActivity">
+
+
+    <LinearLayout
+        android:id="@+id/image_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorWhite2">
+
+        <ImageView
+            android:id="@+id/backImageView"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:onClick="onBackPressed"
+            android:src="@drawable/ic_left_arrow"
+            app:tint="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/image_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_medium"
+            android:lines="1"
+            android:text="Lorem ipsum dolor sit amet....."
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/hide_image_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/image_bottom_option"
+        android:layout_below="@+id/image_toolbar"
+        android:background="@color/colorWhite" />
+
+    <LinearLayout
+        android:id="@+id/image_bottom_option"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        android:clickable="false">
+
+        <LinearLayout
+            android:id="@+id/container_iv_rotate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_rotate"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_unlock"
+                app:tint="@color/colorBlack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_iv_share"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_share"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_share"
+                app:tint="@color/colorBlack" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_iv_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_delete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/colorBlack" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

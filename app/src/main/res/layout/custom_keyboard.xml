@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.36" />
+
+        <TextView
+            android:id="@+id/tv_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_5"
+            app:layout_constraintEnd_toEndOf="@+id/tv_5"
+            app:layout_constraintStart_toStartOf="@+id/tv_5" />
+
+        <TextView
+            android:id="@+id/tv_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_5"
+            app:layout_constraintEnd_toStartOf="@+id/tv_5"
+            app:layout_constraintTop_toTopOf="@+id/tv_5" />
+
+
+        <TextView
+            android:id="@+id/tv_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/tv_5"
+            app:layout_constraintStart_toStartOf="@+id/tv_5"
+            app:layout_constraintTop_toBottomOf="@+id/tv_5" />
+
+        <TextView
+            android:id="@+id/tv_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="6"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_5"
+            app:layout_constraintStart_toEndOf="@+id/tv_5"
+            app:layout_constraintTop_toTopOf="@+id/tv_5" />
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_4"
+            app:layout_constraintEnd_toStartOf="@+id/tv_2" />
+
+        <TextView
+            android:id="@+id/tv_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_6"
+            app:layout_constraintStart_toEndOf="@+id/tv_2" />
+
+        <TextView
+            android:id="@+id/tv_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="7"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_8"
+            app:layout_constraintTop_toBottomOf="@+id/tv_4" />
+
+        <TextView
+            android:id="@+id/tv_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="9"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tv_8"
+            app:layout_constraintTop_toBottomOf="@+id/tv_6" />
+
+        <TextView
+            android:id="@+id/tv_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/pin_btn_bg"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorKeyboardText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/tv_8"
+            app:layout_constraintStart_toStartOf="@+id/tv_8"
+            app:layout_constraintTop_toBottomOf="@+id/tv_8" />
+
+        <ImageView
+            android:id="@+id/iv_backspace"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:clickable="true"
+            android:src="@drawable/ic_clear"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_10"
+            app:layout_constraintTop_toTopOf="@+id/tv_10"
+            app:tint="@color/colorKeyboardButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

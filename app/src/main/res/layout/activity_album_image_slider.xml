@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/colorWhite"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="gallerypro.galleryapp.bestgallery.activity.AlbumImageSliderActivity">
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/image_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorWhite2">
+
+            <ImageView
+                android:id="@+id/backImageView"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_left_arrow"
+                app:tint="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/image_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium"
+                android:lines="1"
+                android:text="Lorem ipsum dolor sit amet....."
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/img_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="6dp"
+                android:src="@drawable/ic_like_24"
+                app:tint="@color/colorBlack" />
+
+            <ImageView
+                android:id="@+id/img_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="16sp"
+                android:src="@drawable/ic_info_24"
+                app:tint="@color/colorBlack" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/iv_more_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_baseline_more_vert"
+                app:tint="@color/colorBlack" />
+
+        </LinearLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/albumImageviewPage"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/image_bottom_option"
+            android:layout_below="@+id/image_toolbar" />
+
+        <LinearLayout
+            android:id="@+id/image_bottom_option"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:clickable="false"
+            android:background="@color/colorWhite"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/image_rotate"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/ic_like_24"
+                app:tint="@color/colorBlack" />
+
+            <ImageView
+                android:id="@+id/image_edit"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/colorBlack" />
+
+            <ImageView
+                android:id="@+id/image_share"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/ic_share"
+                app:tint="@color/colorBlack" />
+
+            <ImageView
+                android:id="@+id/image_delete"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/colorBlack" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <com.google.android.gms.ads.admanager.AdManagerAdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adManagerAdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorWhite"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/admob_banner" />
+
+
+</LinearLayout>
