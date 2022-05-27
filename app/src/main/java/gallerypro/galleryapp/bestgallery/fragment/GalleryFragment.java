@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -258,6 +259,7 @@ public class GalleryFragment extends Fragment implements AlbumClickListener, All
                 allImagesModel.setId(Integer.parseInt(id));
                 allImagesModel.setPath(path);
                 allImagesModel.setName(name);
+                allImagesModel.setColumnsId(String.valueOf(cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))));
                 allImagesModel.setDate(dateFormatted);
                 allImagesModel.setPictureSize(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.SIZE)));
                 allImagesModel.setImageHeightWidth((cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.HEIGHT)) + " x "
@@ -340,22 +342,24 @@ public class GalleryFragment extends Fragment implements AlbumClickListener, All
         this.pictureFolderPath = pictureFolderPath;
         this.folderName = folderName;
 
-        Date date = new Date();
-        if (preferenceManager.getAdsTime() <= date.getTime()) {
-            if (mAdManagerInterstitialAd != null) {
-                mAdManagerInterstitialAd.show(getActivity());
-            } else {
-                Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
-                intent.putExtra("folderPath", pictureFolderPath);
-                intent.putExtra("folderName", folderName);
-                startActivity(intent);
-            }
+        if (mAdManagerInterstitialAd != null) {
+            mAdManagerInterstitialAd.show(getActivity());
         } else {
             Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
             intent.putExtra("folderPath", pictureFolderPath);
             intent.putExtra("folderName", folderName);
             startActivity(intent);
         }
+
+       /* Date date = new Date();
+        if (preferenceManager.getAdsTime() <= date.getTime()) {
+
+        } else {
+            Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+            intent.putExtra("folderPath", pictureFolderPath);
+            intent.putExtra("folderName", folderName);
+            startActivity(intent);
+        }*/
 
 
         //  5 <= 6
@@ -429,7 +433,7 @@ public class GalleryFragment extends Fragment implements AlbumClickListener, All
                 //privacy policy
 
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://gallerypro2021privacypolicy.blogspot.com/2021/03/privacy-policy.html"));
+                i.setData(Uri.parse("https://samsprivacypolicy.blogspot.com/2022/03/privacy-policy.html"));
                 startActivity(i);
                 break;
         }
@@ -441,7 +445,6 @@ public class GalleryFragment extends Fragment implements AlbumClickListener, All
     public void onPicClicked(List<AllImagesModel> allImagesModelList, int position) {
 
     }
-
 
 //        ImageSliderFragment imageSliderFragment = ImageSliderFragment.newInstance(consolidatedList,position,getContext());
 //
@@ -491,9 +494,9 @@ public class GalleryFragment extends Fragment implements AlbumClickListener, All
                                 // Make sure to set your reference to null so you don't
                                 // show it a second time.
                                 mAdManagerInterstitialAd = null;
-                                Date date = new Date();
+//                                Date date = new Date();
 //                if (preferenceManager.getAdsTime() == 0){
-                                preferenceManager.saveAdsTime(date.getTime() + (10 * 60 * 1000)); // 1800000 milisecound
+//                                preferenceManager.saveAdsTime(date.getTime() + (10 * 60 * 1000)); // 1800000 milisecound
 //                }
                                 Log.d("TAG", "The ad was shown.");
                             }

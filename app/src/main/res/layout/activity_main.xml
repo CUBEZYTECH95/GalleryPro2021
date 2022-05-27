@@ -5,14 +5,14 @@
     android:id="@+id/mainActivityContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorWhite"
+    android:orientation="vertical"
     tools:context="gallerypro.galleryapp.bestgallery.activity.MainActivity">
 
     <RelativeLayout
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -41,10 +41,18 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/chip_navigationbar"
+            android:layout_above="@+id/adManagerAdView"
             android:layout_below="@+id/appbar"
             android:orientation="horizontal" />
 
+        <com.google.android.gms.ads.admanager.AdManagerAdView
+            android:id="@+id/adManagerAdView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/chip_navigationbar"
+            android:layout_centerHorizontal="true"
+            app:adSize="BANNER"
+            app:adUnitId="@string/admob_banner" />
 
         <com.ismaeldivita.chipnavigation.ChipNavigationBar
             android:id="@+id/chip_navigationbar"
@@ -55,14 +63,6 @@
             app:cnb_menuResource="@menu/bottom_nav_menu" />
 
     </RelativeLayout>
-
-    <com.google.android.gms.ads.admanager.AdManagerAdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adManagerAdView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_banner" />
 
 
     <!--    <com.google.android.material.tabs.TabLayout-->

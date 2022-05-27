@@ -33,10 +33,11 @@ import gallerypro.galleryapp.bestgallery.R;
 public class AppOpenManager implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
     private static final String LOG_TAG = "AppOpenManager";
     private static String AD_UNIT_ID ;
-    private AppOpenAd appOpenAd = null;
+        private AppOpenAd appOpenAd = null;
     private Activity currentActivity;
     private static boolean isShowingAd = false;
     private boolean isFirstTime = true;
+    private long loadTime = 0;
 
     private AppOpenAd.AppOpenAdLoadCallback loadCallback;
 
@@ -82,6 +83,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
                             showAdIfAvailable();
                             isFirstTime = false;
                         }
+//                        AppOpenManager.this.loadTime = (new Date()).getTime();
                     }
 
                     /**
@@ -103,7 +105,7 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     }
 
     /** Shows the ad if one isn't already showing. */
-    public void showAdIfAvailable() {
+    public void showAdIfAvailable()     {
         // Only show ad if there is not already an app open ad currently showing
         // and an ad is available.
         if (!isShowingAd && isAdAvailable()) {
@@ -142,9 +144,16 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
         return new AdRequest.Builder().build();
     }
 
+    /** Utility method to check if ad was loaded more than n hours ago. */
+    private boolean wasLoadTimeLessThanNHoursAgo(long numHours) {
+        long dateDifference = (new Date()).getTime() - this.loadTime;
+        long numMilliSecondsPerHour = 3600000;
+        return (dateDifference < (numMilliSecondsPerHour * numHours));
+    }
 
     /** Utility method that checks if ad exists and can be shown. */
     public boolean isAdAvailable() {
+//        return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4);
         return appOpenAd != null;
     }
 

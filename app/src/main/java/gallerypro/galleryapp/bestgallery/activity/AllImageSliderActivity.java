@@ -1,21 +1,29 @@
 package gallerypro.galleryapp.bestgallery.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.RecoverableSecurityException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -54,6 +62,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +88,17 @@ public class AllImageSliderActivity extends AppCompatActivity {
 
     private DbHelper dbHelper;
     private List<Integer> imageIds = new ArrayList<>();
+    //delete
+    int deletePosition;
+    String imageID;
+
+    int getPos() {
+        return this.deletePosition;
+    }
+
+    String getImageID() {
+        return this.imageID;
+    }
 
 
     @Override
@@ -88,14 +108,14 @@ public class AllImageSliderActivity extends AppCompatActivity {
 
         preferenceManager = new PreferenceManager(this);
 
-        if (preferenceManager.checkMode()) {
+        /*if (preferenceManager.checkMode()) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite));
-        }
+        }*/
 
         AdManagerAdView mAdView = findViewById(R.id.adManagerAdView);
         AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
@@ -208,7 +228,7 @@ public class AllImageSliderActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             File file = new File(allImage.get(position).getPath());
                             Log.d("Image File Path", "onClick: " + file.getPath());
-                            showDeleteDialog(file, position, String.valueOf(allImage.get(position).getId()));
+                            showDeleteDialog(allImage.get(position).getPath(), allImage.get(position).getColumnsId(),position, String.valueOf(allImage.get(position).getId()));
                             imagesPager.notifyDataSetChanged();
 
                         }
@@ -292,7 +312,7 @@ public class AllImageSliderActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             File file = new File(allImage.get(allImage.size() - 1).getPath());
                             Log.d("Image File Path", "onClick: " + file.getPath());
-                            showDeleteDialog(file, allImage.size() - 1, String.valueOf(allImage.get(allImage.size() - 1).getId()));
+                            showDeleteDialog( allImage.get(allImage.size() - 1).getPath(),allImage.get(allImage.size()-1).getColumnsId(),allImage.size()-1, String.valueOf(allImage.get(allImage.size() - 1).getId()));
                         }
                     });
                 }
@@ -359,34 +379,39 @@ public class AllImageSliderActivity extends AppCompatActivity {
 
     private void shareImage(int position){
         File file = new File(allImage.get(position).getPath());
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, "share via"));
     }
 
-    public void showDeleteDialog(File file, int j, String imgId) {
-
+    public void showDeleteDialog(String file, String columnId, int j, String imageId) {
 
         Dialog dialog = new Dialog(this, R.style.Dialog_Theme);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.delete_dialog);
 
         Button delete = dialog.findViewById(R.id.btn_delete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePhoto(file, j, imgId);
-                dialog.dismiss();
+        delete.setOnClickListener(v -> {
+            Uri[] uris = new Uri[]{Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columnId)};
+            try {
+                delete(this, uris, 105, imageId, j);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
             }
+//            deleteImage(file,j);
+//            deletePhotos(file,j,imageId);
+//            deletePhoto(file, j, imageId);
+            dialog.dismiss();
         });
         Button cancel = dialog.findViewById(R.id.btn_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        cancel.setOnClickListener(v -> dialog.dismiss());
 
 
         if (dialog.getWindow() != null) {
@@ -395,18 +420,65 @@ public class AllImageSliderActivity extends AppCompatActivity {
 
         dialog.show();
 
-
-//        new AlertDialog.Builder(this)
-//                .setTitle("Delete Photo?")
-//                .setNegativeButton("No", null)
-//                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        deletePhoto(file, j);
-//                    }
-//                })
-//                .create().show();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 105) {
+
+            if (resultCode == RESULT_OK) {
+                dbHelper.removeFav(getImageID());
+                Toast.makeText(this, "Image deleted", Toast.LENGTH_SHORT).show();
+                allImage.remove(getPos());
+                imagesPager.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void delete(final Activity activity, final Uri[] uriList, final int requestCode, String imageId, int i)
+            throws SecurityException, IntentSender.SendIntentException, IllegalArgumentException {
+        final ContentResolver resolver = activity.getContentResolver();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            this.imageID = imageId;
+            this.deletePosition = i;
+            final List<Uri> list = new ArrayList<>();
+            Collections.addAll(list, uriList);
+            final PendingIntent pendingIntent = MediaStore.createDeleteRequest(resolver, list);
+            activity.startIntentSenderForResult(pendingIntent.getIntentSender(), requestCode, null, 0, 0, 0, null);
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+            try {
+
+                for (final Uri uri : uriList) {
+                    resolver.delete(uri, null, null);
+                }
+                dbHelper.removeFav(imageId);
+                Toast.makeText(this, "Image deleted", Toast.LENGTH_SHORT).show();
+                allImage.remove(i);
+                imagesPager.notifyDataSetChanged();
+
+            } catch (RecoverableSecurityException ex) {
+                this.imageID = imageId;
+                this.deletePosition = i;
+                final IntentSender intent = ex.getUserAction()
+                        .getActionIntent()
+                        .getIntentSender();
+                activity.startIntentSenderForResult(intent, requestCode, null, 0, 0, 0, null);
+            }
+        } else {
+            for (final Uri uri : uriList) {
+                resolver.delete(uri, null, null);
+            }
+            dbHelper.removeFav(imageId);
+            Toast.makeText(this, "Image deleted", Toast.LENGTH_SHORT).show();
+            allImage.remove(i);
+            imagesPager.notifyDataSetChanged();
+
+        }
+    }
+
 
     private void deletePhoto(File file, int i, String imgId) {
 

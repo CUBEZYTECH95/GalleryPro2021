@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -128,11 +129,12 @@ public class AlbumImageActivity extends AppCompatActivity implements AlbumClickL
         if (allPictures.isEmpty()) {
             finish();
         }
-        if (preferenceManager.checkMode()) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
+
+        /*if (preferenceManager.checkMode()) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }*/
     }
 
     @Override
@@ -150,15 +152,16 @@ public class AlbumImageActivity extends AppCompatActivity implements AlbumClickL
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        Tools.setSystemBarColor(this, R.color.colorPrimary);
 
-        if (preferenceManager.checkMode()) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
+        /*if (preferenceManager.checkMode()) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite));
-        }
+        }*/
 
 //        Tools.FullScreencall(this);
 
@@ -389,8 +392,9 @@ public class AlbumImageActivity extends AppCompatActivity implements AlbumClickL
 
                 for (Integer i : deletePath.keySet()) {
                     String path = deletePath.get(i);
+                    String contentUri = getContentUri(Uri.parse(path));
                     if (path != null) {
-                        uriList.add(Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, path));
+                        uriList.add(Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentUri));
                         deletePosition.add(i);
 
                     }
@@ -507,7 +511,7 @@ public class AlbumImageActivity extends AppCompatActivity implements AlbumClickL
         }
     }
 
-    private Uri getContentUri(Uri imageUri) {
+    private String getContentUri(Uri imageUri) {
         long id = 0;
         String[] projection = {MediaStore.MediaColumns._ID};
         Cursor cursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.MediaColumns.DATA + "=?", new String[]{imageUri.getPath()}, null);
@@ -519,25 +523,29 @@ public class AlbumImageActivity extends AppCompatActivity implements AlbumClickL
             }
             cursor.close();
         }
-        return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+        return String.valueOf(id);
     }
 
     private void shareImages() {
+
         HashMap<Integer, String> sharePath = adapter.getDeleteItems();
         ArrayList<Uri> files = new ArrayList<>();
-        Iterator iterator = sharePath.values().iterator();
-        while (iterator.hasNext()) {
-            String shareImagePath = iterator.next().toString();
-            File file = new File(shareImagePath);
-            Uri uri = Uri.fromFile(file);
+        for (String s : sharePath.values()) {
+            File file = new File(s);
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+            } else {
+                uri = Uri.fromFile(file);
+            }
             files.add(uri);
         }
-
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("image/*");
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
         startActivity(intent);
+
     }
 
 

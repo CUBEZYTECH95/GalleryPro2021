@@ -12,13 +12,14 @@ public class AllImagesModel implements Serializable {
         long dateModified;
         String imageHeightWidth;
         String pictureSize;
+        String columnsId;
 
 
 
         public AllImagesModel() {
         }
 
-        public AllImagesModel(int id, String path, String name, String date, long dateTaken, long dateModified, String imageHeightWidth, String pictureSize) {
+        public AllImagesModel(int id, String path, String name, String date, long dateTaken, long dateModified, String imageHeightWidth, String pictureSize,String columnsId) {
                 this.id = id;
                 this.path = path;
                 this.name = name;
@@ -27,6 +28,7 @@ public class AllImagesModel implements Serializable {
                 this.dateModified = dateModified;
                 this.imageHeightWidth = imageHeightWidth;
                 this.pictureSize = pictureSize;
+                this.columnsId = columnsId;
         }
 
 
@@ -92,5 +94,13 @@ public class AllImagesModel implements Serializable {
 
         public void setDate(String date) {
                 this.date = date;
+        }
+
+        public String getColumnsId() {
+                return columnsId;
+        }
+
+        public void setColumnsId(String columnsId) {
+                this.columnsId = columnsId;
         }
 }

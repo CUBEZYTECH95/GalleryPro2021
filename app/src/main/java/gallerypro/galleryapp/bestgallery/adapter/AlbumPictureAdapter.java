@@ -129,7 +129,7 @@ public class AlbumPictureAdapter extends RecyclerView.Adapter<PictureViewHolder>
             deleteImageMap.remove(pos);
         } else {
             selected_items.put(pos, true);
-            deleteImageMap.put(pos,pictureList.get(pos).getColumnsId());
+            deleteImageMap.put(pos,pictureList.get(pos).getPicturePath());
             Log.d("add", "toggleCheckedIcon: "+pos);
         }
         notifyItemChanged(pos);

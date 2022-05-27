@@ -49,7 +49,8 @@ public class FavVideoFragment extends Fragment implements VideoClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fav_video, container, false);
 
-        preferenceManager = new PreferenceManager(getContext());
+
+
         videoDbHelper = new VideoDbHelper(getContext());
         getActivity().setTitle("Favourite");
         initToolbar();

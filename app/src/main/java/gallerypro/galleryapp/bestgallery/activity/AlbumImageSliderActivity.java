@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -50,8 +51,13 @@ import gallerypro.galleryapp.bestgallery.model.AlbumPictureModel;
 import gallerypro.galleryapp.bestgallery.preference.PreferenceManager;
 import gallerypro.galleryapp.bestgallery.utils.Tools;
 
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAd;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -84,6 +90,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
     private TextView textViewImageTitle;
     private ImageView imageViewBack;
     private ImageView imageViewLike;
+    int mAdCount = 0;
 
     //imagePager
 //    private ImageSliderFragment.ImagePager imagePager;
@@ -108,6 +115,8 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
 
     ActivityResultLauncher<IntentSenderRequest> intentSenderRequest;
+    private AdManagerInterstitialAd mAdManagerInterstitialAd;
+
 
     //delete
     int deletePosition;
@@ -137,7 +146,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
 
         preferenceManager = new PreferenceManager(this);
 
-        if (preferenceManager.checkMode()) {
+        /*if (preferenceManager.checkMode()) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -145,23 +154,22 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite2));
-        }
+        }*/
 
         AdManagerAdView mAdView = findViewById(R.id.adManagerAdView);
         AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
 
         AlbumImageSliderModel albumImageSliderModel = (AlbumImageSliderModel) getIntent().getSerializableExtra("key");
         allImage = albumImageSliderModel.getAlbumPictureModelList();
         position = albumImageSliderModel.getPosition();
 
         dbHelper = new DbHelper(this);
+
         /*for (int i = 0; i < allImage.size(); i++) {
             imageIds.add(allImage.get(i).getPictureId());
         }
         dbHelper.createEmptyTable(imageIds);*/
-
 
         ivInfo = findViewById(R.id.img_info);
         imageViewLike = findViewById(R.id.img_like);
@@ -347,11 +355,20 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
                             imageOptionMenu(allImage.size() - 1);
                         }
                     });
+
                 }
+
             }
 
             @Override
             public void onPageSelected(int position) {
+
+                mAdCount++;
+                if (mAdCount % 5 == 0) {
+                    if (mAdManagerInterstitialAd != null) {
+                        mAdManagerInterstitialAd.show(AlbumImageSliderActivity.this);
+                    }
+                }
 
             }
 
@@ -364,11 +381,117 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFbInterstitialAds();
+    }
+
+    private void loadFbInterstitialAds() {
+
+        AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
+
+        AdManagerInterstitialAd.load(AlbumImageSliderActivity.this, getString(R.string.admob_interstitial), adRequest,
+                new AdManagerInterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull AdManagerInterstitialAd interstitialAd) {
+                        mAdManagerInterstitialAd = interstitialAd;
+                        mAdManagerInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                // Called when fullscreen content is dismissed.
+                                Log.d("TAG", "The ad was dismissed.");
+//                                Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+//                                intent.putExtra("folderPath", pictureFolderPath);
+//                                intent.putExtra("folderName", folderName);
+//                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                // Called when fullscreen content failed to show.
+                                Log.d("TAG", "The ad failed to show.");
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+
+                                // Called when fullscreen content is shown.
+                                // Make sure to set your reference to null so you don't
+                                // show it a second time.
+                                mAdManagerInterstitialAd = null;
+//                                Date date = new Date();
+////                if (preferenceManager.getAdsTime() == 0){
+//                                preferenceManager.saveAdsTime(date.getTime() + (10 * 60 * 1000)); // 1800000 milisecound
+//                }
+                                Log.d("TAG", "The ad was shown.");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+
+                        mAdManagerInterstitialAd = null;
+//                        Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+//                        intent.putExtra("folderPath", pictureFolderPath);
+//                        intent.putExtra("folderName", folderName);
+//                        startActivity(intent);
+                    }
+
+                });
+
+        /*interstitialAd = new InterstitialAd(getContext(), getString(R.string.facebook_interstitial));
+
+        InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+                Date date = new Date();
+//                if (preferenceManager.getAdsTime() == 0){
+                preferenceManager.saveAdsTime(date.getTime() + 1800000);
+//                }
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+                intent.putExtra("folderPath", pictureFolderPath);
+                intent.putExtra("folderName", folderName);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Ad error callback
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+            }
+        };
+
+        interstitialAd.loadAd(
+                interstitialAd.buildLoadAdConfig()
+                        .withAdListener(interstitialAdListener)
+                        .build());
+*/
+
+    }
+
     private void imageOptionMenu(int position) {
         PopupMenu popupMenu = new PopupMenu(AlbumImageSliderActivity.this, ivMoreOption);
         popupMenu.getMenuInflater().inflate(R.menu.image_popup_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -386,7 +509,9 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void hideImage(int position) {
+
         if (preferenceManager.isPinSeted()) {
 
             newRename(allImage.get(position), this);
@@ -436,6 +561,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void hideImageApi30(AlbumPictureModel model) {
 
         File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".hideImage");
@@ -512,6 +638,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void newRename(AlbumPictureModel model, Activity activity) {
         List<Uri> uris = new ArrayList<>();
         long mediaID = getFilePathToMediaID(new File(model.getPicturePath()).getAbsolutePath(), this);
@@ -531,9 +658,18 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
 
     private void shareImage(int position) {
         File file = new File(allImage.get(position).getPicturePath());
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+
+
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, "share via"));
     }
 
@@ -872,6 +1008,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -931,13 +1068,13 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         c.close();
     }
 
-    @Override
+   /* @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && hasFocus) {
             Tools.FullScreencall(this);
         }
-    }
+    }*/
 
 
 }

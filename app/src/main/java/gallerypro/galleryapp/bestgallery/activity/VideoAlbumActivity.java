@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -146,8 +147,8 @@ public class VideoAlbumActivity extends AppCompatActivity implements VideoClickL
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Inbox");
-//        Tools.setSystemBarColor(this, R.color.colorWhite2);
-        if (preferenceManager.checkMode()) {
+
+/*        if (preferenceManager.checkMode()) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -155,7 +156,7 @@ public class VideoAlbumActivity extends AppCompatActivity implements VideoClickL
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite));
-        }
+        }*/
     }
 
 
@@ -325,7 +326,12 @@ public class VideoAlbumActivity extends AppCompatActivity implements VideoClickL
         while (iterator.hasNext()) {
             String videoPath = iterator.next().toString();
             File file = new File(videoPath);
-            Uri uri = Uri.fromFile(file);
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+            } else {
+                uri = Uri.fromFile(file);
+            }
             files.add(uri);
         }
         Intent intent = new Intent();
@@ -335,6 +341,20 @@ public class VideoAlbumActivity extends AppCompatActivity implements VideoClickL
         startActivity(intent);
     }
 
+    private String getContentUri(Uri imageUri) {
+        long id = 0;
+        String[] projection = {MediaStore.MediaColumns._ID};
+        Cursor cursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.MediaColumns.DATA + "=?", new String[]{imageUri.getPath()}, null);
+        if (cursor != null) {
+
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
+            }
+            cursor.close();
+        }
+        return String.valueOf(id);
+    }
 
     private void deleteVideo(ActionMode mode) {
 
@@ -352,8 +372,9 @@ public class VideoAlbumActivity extends AppCompatActivity implements VideoClickL
 
                 for (Integer i : deletePath.keySet()) {
                     String path = deletePath.get(i);
+                    String contentUri = getContentUri(Uri.parse(path));
                     if (path != null) {
-                        uriList.add(Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, path));
+                        uriList.add(Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentUri));
                         deletePosition.add(i);
                     }
                 }

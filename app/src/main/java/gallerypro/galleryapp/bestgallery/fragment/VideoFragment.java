@@ -183,22 +183,24 @@ public class VideoFragment extends Fragment implements VideoAlbumClickListener {
         this.videoAlbumPath = videoAlbumPath;
         this.albumName = albumName;
 
-        Date date = new Date();
-        if (preferenceManager.getAdsTime() <= date.getTime()) {
-            if (mAdManagerInterstitialAd !=  null) {
-                mAdManagerInterstitialAd.show(getActivity());
-            } else {
-                Intent intent = new Intent(getActivity(), VideoAlbumActivity.class);
-                intent.putExtra("videoAlbumPath", videoAlbumPath);
-                intent.putExtra("albumName", albumName);
-                startActivity(intent);
-            }
+        if (mAdManagerInterstitialAd !=  null) {
+            mAdManagerInterstitialAd.show(getActivity());
         } else {
             Intent intent = new Intent(getActivity(), VideoAlbumActivity.class);
             intent.putExtra("videoAlbumPath", videoAlbumPath);
             intent.putExtra("albumName", albumName);
             startActivity(intent);
         }
+
+       /* Date date = new Date();
+        if (preferenceManager.getAdsTime() <= date.getTime()) {
+
+        } else {
+            Intent intent = new Intent(getActivity(), VideoAlbumActivity.class);
+            intent.putExtra("videoAlbumPath", videoAlbumPath);
+            intent.putExtra("albumName", albumName);
+            startActivity(intent);
+        }*/
 
 
     }
@@ -236,9 +238,9 @@ public class VideoFragment extends Fragment implements VideoAlbumClickListener {
                                 // Make sure to set your reference to null so you don't
                                 // show it a second time.
                                 mAdManagerInterstitialAd = null;
-                                Date date = new Date();
+//                                Date date = new Date();
 //                if (preferenceManager.getAdsTime() == 0){
-                                preferenceManager.saveAdsTime(date.getTime()+(10 * 60 * 1000));//         1800000 milisecound       }
+//                                preferenceManager.saveAdsTime(date.getTime()+(10 * 60 * 1000));//         1800000 milisecound       }
                                 Log.d("TAG", "The ad was shown.");
                             }
                         });

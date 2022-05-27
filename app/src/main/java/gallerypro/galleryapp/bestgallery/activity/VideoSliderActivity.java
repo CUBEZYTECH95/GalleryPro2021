@@ -2,8 +2,10 @@ package gallerypro.galleryapp.bestgallery.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -21,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +35,13 @@ import android.widget.Toast;
 import com.ToxicBakery.viewpager.transforms.DrawerTransformer;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAd;
+import com.google.android.gms.ads.admanager.AdManagerInterstitialAdLoadCallback;
 
 import gallerypro.galleryapp.bestgallery.R;
 import gallerypro.galleryapp.bestgallery.database.VideoDbHelper;
@@ -52,12 +60,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class VideoSliderActivity extends AppCompatActivity {
 
     private PreferenceManager preferenceManager;
     private List<AllVideoModel> allVideoList = new ArrayList<>();
     private int position;
     private ViewPager viewPager;
+    private AdManagerInterstitialAd mAdManagerInterstitialAd;
 
     private ImageView ivBack;
     private TextView tvTitle;
@@ -72,6 +82,7 @@ public class VideoSliderActivity extends AppCompatActivity {
     private VideoPager videoPager;
 
     private VideoDbHelper videoDbHelper;
+    int mAdCount = 0;
 
     //delete
     private int deletePosition;
@@ -92,7 +103,7 @@ public class VideoSliderActivity extends AppCompatActivity {
 
         preferenceManager = new PreferenceManager(this);
 
-        if (preferenceManager.checkMode()) {
+        /*if (preferenceManager.checkMode()) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -100,7 +111,8 @@ public class VideoSliderActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite));
-        }
+        }*/
+
         AdManagerAdView mAdView = findViewById(R.id.adManagerAdView);
         AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -124,7 +136,6 @@ public class VideoSliderActivity extends AppCompatActivity {
         viewPager.setCurrentItem(position);
 
         videoDbHelper = new VideoDbHelper(this);
-
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -229,6 +240,13 @@ public class VideoSliderActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
+                mAdCount++;
+                if (mAdCount % 5 == 0) {
+                    if (mAdManagerInterstitialAd != null) {
+                        mAdManagerInterstitialAd.show(VideoSliderActivity.this);
+                    }
+                }
+
             }
 
             @Override
@@ -247,13 +265,124 @@ public class VideoSliderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFbInterstitialAds();
+    }
+
+    private void loadFbInterstitialAds() {
+
+        AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
+
+        AdManagerInterstitialAd.load(VideoSliderActivity.this, getString(R.string.admob_interstitial), adRequest,
+                new AdManagerInterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull AdManagerInterstitialAd interstitialAd) {
+                        mAdManagerInterstitialAd = interstitialAd;
+                        mAdManagerInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                // Called when fullscreen content is dismissed.
+                                Log.d("TAG", "The ad was dismissed.");
+//                                Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+//                                intent.putExtra("folderPath", pictureFolderPath);
+//                                intent.putExtra("folderName", folderName);
+//                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                // Called when fullscreen content failed to show.
+                                Log.d("TAG", "The ad failed to show.");
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+
+                                // Called when fullscreen content is shown.
+                                // Make sure to set your reference to null so you don't
+                                // show it a second time.
+                                mAdManagerInterstitialAd = null;
+//                                Date date = new Date();
+////                if (preferenceManager.getAdsTime() == 0){
+//                                preferenceManager.saveAdsTime(date.getTime() + (10 * 60 * 1000)); // 1800000 milisecound
+//                }
+                                Log.d("TAG", "The ad was shown.");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+
+                        mAdManagerInterstitialAd = null;
+//                        Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+//                        intent.putExtra("folderPath", pictureFolderPath);
+//                        intent.putExtra("folderName", folderName);
+//                        startActivity(intent);
+                    }
+
+                });
+
+        /*interstitialAd = new InterstitialAd(getContext(), getString(R.string.facebook_interstitial));
+
+        InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+                Date date = new Date();
+//                if (preferenceManager.getAdsTime() == 0){
+                preferenceManager.saveAdsTime(date.getTime() + 1800000);
+//                }
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                Intent intent = new Intent(getActivity(), AlbumImageActivity.class);
+                intent.putExtra("folderPath", pictureFolderPath);
+                intent.putExtra("folderName", folderName);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Ad error callback
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+            }
+        };
+
+        interstitialAd.loadAd(
+                interstitialAd.buildLoadAdConfig()
+                        .withAdListener(interstitialAdListener)
+                        .build());
+*/
+
+    }
+
 
     private void shareVideo(int i) {
         File file = new File(allVideoList.get(i).getPath());
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("video/*");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(intent);
     }
 

@@ -104,8 +104,8 @@ public class FavouriteImageActivity extends AppCompatActivity implements AlbumCl
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Favourite Image");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        Tools.setSystemBarColor(this, R.color.colorPrimary);
-        if (preferenceManager.checkMode()) {
+
+/*        if (preferenceManager.checkMode()) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -113,7 +113,7 @@ public class FavouriteImageActivity extends AppCompatActivity implements AlbumCl
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorWhite));
-        }
+        }*/
     }
 
     private AlbumPictureModel getFavImage(String imageId) {

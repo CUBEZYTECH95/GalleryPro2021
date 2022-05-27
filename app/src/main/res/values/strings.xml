@@ -9,13 +9,12 @@
     <string name="admob_app_open">ca-app-pub-3940256099942544/3419835294</string>
     <string name="admob_native">ca-app-pub-3940256099942544/2247696110</string>
 -->
-    <string name="facebook_banner">IMG_16_9_APP_INSTALL#2822925034589011_2826374884244026</string>
-    <string name="facebook_native">IMG_16_9_APP_INSTALL#2822925034589011_2830338053847709</string>
-    <string name="facebook_interstitial">IMG_16_9_APP_INSTALL#881230829336069_881232102669275</string>
+<!--    <string name="facebook_banner">IMG_16_9_APP_INSTALL#2822925034589011_2826374884244026</string>-->
+<!--    <string name="facebook_native">IMG_16_9_APP_INSTALL#2822925034589011_2830338053847709</string>-->
+<!--    <string name="facebook_interstitial">IMG_16_9_APP_INSTALL#881230829336069_881232102669275</string>-->
 
 
-
-    <!--    AdManager Test Id   -->
+        AdManager Test Id
 
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admob_banner">/6499/example/banner</string>
@@ -23,16 +22,18 @@
     <string name="admob_native">/6499/example/native</string>
     <string name="admob_interstitial">/6499/example/interstitial</string>
 
-
     <!--        live id         -->
-    <!--<string name="admob_app_id">ca-app-pub-4293491867572780~5529146740</string>
-    <string name="admob_banner">ca-app-pub-4293491867572780/7963738395</string>
-    <string name="admob_app_open">ca-app-pub-4293491867572780/93453317360</string>
-    <string name="admob_native">ca-app-pub-4293491867572780/1709566058</string>
 
-    <string name="facebook_banner">450407973043286_450412909709459</string>
+<!--    <string name="admob_app_id">ca-app-pub-3206456546664189~3522446102</string>-->
+<!--    <string name="admob_banner">/22387492205,22654642069/gallerypro.galleryapp.bestgallery.Banner0.1637838716</string>-->
+<!--    <string name="admob_app_open">/22387492205,22654642069/gallerypro.galleryapp.bestgallery.AppOpen0.1637839022</string>-->
+<!--    <string name="admob_native">/22387492205,22654642069/gallerypro.galleryapp.bestgallery.Native0.1637838997</string>-->
+<!--    <string name="admob_interstitial">/22387492205,22654642069/gallerypro.galleryapp.bestgallery.Interstitial0.1637838964</string>-->
+
+
+    <!--<string name="facebook_banner">450407973043286_450412909709459</string>
     <string name="facebook_native">450407973043286_450416016375815</string>
-    <string name="facebook_interstitial">450407973043286_450414079709342</string>-->
+    <string name="facebook_interstitial">450407973043286_450414079709342</string>&ndash;&gt;-->
 
 
 </resources>

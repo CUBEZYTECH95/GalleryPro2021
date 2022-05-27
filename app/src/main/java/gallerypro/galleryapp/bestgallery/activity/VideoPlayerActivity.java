@@ -137,6 +137,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
     }
 
     private void initializePlayer() {
+
         simpleExoPlayer = new SimpleExoPlayer.Builder(this).build();
         playerView.setPlayer(simpleExoPlayer);
         MediaItem mediaItem = MediaItem.fromUri(path);

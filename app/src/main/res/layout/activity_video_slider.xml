@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -26,7 +26,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/ic_left_arrow"
-                app:tint="@color/colorBlack" />
+                app:tint="@color/colorBlack"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/video_title"
@@ -67,9 +68,18 @@
             android:id="@+id/albumVideoViewPage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/video_bottom_option"
+            android:layout_above="@+id/adManagerAdView"
             android:layout_below="@+id/video_toolbar"
             android:background="@color/colorWhite" />
+
+        <com.google.android.gms.ads.admanager.AdManagerAdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adManagerAdView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            android:layout_above="@+id/video_bottom_option"
+            ads:adUnitId="@string/admob_banner" />
 
         <LinearLayout
             android:id="@+id/video_bottom_option"
@@ -110,13 +120,7 @@
 
     </RelativeLayout>
 
-    <com.google.android.gms.ads.admanager.AdManagerAdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adManagerAdView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_banner" />
+
 
 
 </LinearLayout>

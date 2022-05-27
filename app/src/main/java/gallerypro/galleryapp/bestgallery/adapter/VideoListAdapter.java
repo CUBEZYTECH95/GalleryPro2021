@@ -124,7 +124,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             deleteVideoMap.remove(pos);
         } else {
             selected_items.put(pos, true);
-            deleteVideoMap.put(pos,allVideoList.get(pos).getColumnId());
+            deleteVideoMap.put(pos,allVideoList.get(pos).getPath());
         }
         notifyItemChanged(pos);
     }

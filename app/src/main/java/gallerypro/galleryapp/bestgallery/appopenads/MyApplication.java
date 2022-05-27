@@ -1,6 +1,9 @@
 package gallerypro.galleryapp.bestgallery.appopenads;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -8,7 +11,8 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 public class MyApplication extends Application {
 
-    private static AppOpenManager appOpenManager;
+    @SuppressLint("StaticFieldLeak")
+    public static AppOpenManager appOpenManager;
 
     @Override
     public void onCreate() {
@@ -17,7 +21,7 @@ public class MyApplication extends Application {
                 this,
                 new OnInitializationCompleteListener() {
                     @Override
-                    public void onInitializationComplete(InitializationStatus initializationStatus) {
+                    public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
                     }
                 });
 
