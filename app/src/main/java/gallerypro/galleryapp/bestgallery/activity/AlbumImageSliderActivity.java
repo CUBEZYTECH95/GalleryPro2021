@@ -195,7 +195,7 @@ public class AlbumImageSliderActivity extends AppCompatActivity {
         //            textViewImageTitle.setText(allImage.get(position).getPictureName());
         imagesPager = new ImagePager();
         viewPager.setAdapter(imagesPager);
-        viewPager.setPageTransformer(true, new DrawerTransformer());
+        viewPager.setPageTransformer(true, (ViewPager.PageTransformer) new DrawerTransformer());
         viewPager.setCurrentItem(position);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

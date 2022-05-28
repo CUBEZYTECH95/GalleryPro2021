@@ -24,7 +24,9 @@ android {
     }
 
     buildTypes {
+
         release {
+
             debuggable false
             useProguard true
             minifyEnabled true
@@ -44,8 +46,8 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+        ignoreWarnings true
     }
-
 
 }
 
